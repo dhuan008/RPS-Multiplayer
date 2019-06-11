@@ -4,6 +4,20 @@ var rpsM = {
     // Variables 
     // ========================
     database: null,
+    player1: {
+        name: null,
+        choice: null
+    },
+    player2: {
+        name: null,
+        choice: null
+    },
+    winConditions: {
+        rock: "scissors",
+        paper: "rock",
+        scissors: "paper"
+    },
+
 
     // ========================
     // Methods 
@@ -23,6 +37,19 @@ var rpsM = {
 
         // Create a variable to reference the database
         this.database = firebase.database();
+    },
+
+    // Check who wins
+    checkWin: function () {
+        if (this.player1.choice == this.player2.choice) {
+            return result = "tie";
+        }
+        else if (this.winConditions[this.player1.choice] == this.player2.choice) {
+            return victor = "player 1"; // player 1 wins
+        }
+        else {
+            return victor = "player 2"; // player 2 wins
+        }
     }
 };
 
@@ -31,9 +58,10 @@ var rpsM = {
 // ========================
 // Shorthand for $( document ).ready()
 $(function () {
-    // Tooltip
+    // Tooltip show what each symbol means
     $('.tooltipped').tooltip();
 
+    // Initialize firebase
     rpsM.initFirebase();
     console.log(rpsM.database);
 
