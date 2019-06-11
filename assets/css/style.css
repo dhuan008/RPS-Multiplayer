@@ -3,12 +3,61 @@ body, main {
     height: 100vh;
 }
 
-/* Remove spacing between card text and card options */
-.card .card-content {
-    padding-top: 0px;
-}
-
 /* Rotate icon by 90deg and flip on vertical axis */
 .fa-flipY-rotate90 {
     transform: rotate(90deg) scaleY(-1);
+}
+
+/* Remove spacing between card text and card options
+.card .card-content {
+    padding-top: 0px;
+}
+*/
+
+/* Halfway fab */
+.btn-large {
+    margin-top: -50px;
+}
+.card-title {
+    margin-bottom: 15px;
+}
+
+/* Button hover effect */
+.btn-large {
+    overflow: hidden;
+  }
+  .btn-large:hover::before {
+    opacity:1;
+  }
+  .btn-large:before {
+    content: '';
+    opacity: 0;
+    background-color: rgba(68, 138, 255, 0.6);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transition: opacity .2s;
+    z-index: -1;
+  }
+
+/* Waves brown */
+.waves-effect.waves-brown .waves-ripple {
+    background-color: rgba(121, 85, 72, 0.65);
+}
+
+/* Icon thickness */
+.fa {
+    font-weight: bolder;
+}
+/* Change icon color */
+.fa-hand-rock-o {
+    color: rgb(115, 239, 255) !important;
+}
+.fa-hand-paper-o {
+    color: rgb(255, 255, 83) !important;
+}
+.fa-hand-scissors-o {
+    color: rgb(255, 49, 255) !important;
 }

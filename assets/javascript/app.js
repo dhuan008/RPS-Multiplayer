@@ -31,6 +31,9 @@ var rpsM = {
 // ========================
 // Shorthand for $( document ).ready()
 $(function () {
+    // Tooltip
+    $('.tooltipped').tooltip();
+
     rpsM.initFirebase();
     console.log(rpsM.database);
 
