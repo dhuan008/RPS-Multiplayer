@@ -1,97 +1,97 @@
 // Game Object
-var rpsM = {
-    // ========================
-    // Variables 
-    // ========================
-    database: null,
-    player1: {
-        name: null,
-        choice: null
-    },
-    player2: {
-        name: null,
-        choice: null
-    },
-    winConditions: {
-        rock: "scissors",
-        paper: "rock",
-        scissors: "paper"
-    },
 
 
-    // ========================
-    // Methods 
-    // ========================
+// ========================
+// Methods 
+// ========================
 
-    // Firebase config and initialization details
-    initFirebase: function () {
-        // RPS-Multiplayer's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyC6tUCxvDD9K69cFl65qzNUzd7Wk7ZrKMY",
-            authDomain: "rps-multiplayer-1d946.firebaseapp.com",
-            databaseURL: "https://rps-multiplayer-1d946.firebaseio.com",
-            storageBucket: "rps-multiplayer-1d946.appspot.com",
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-
-        // Create a variable to reference the database
-        this.database = firebase.database();
-    },
-
-    // Check who wins
-    checkWin: function () {
-        if (this.player1.choice == this.player2.choice) {
-            return result = "tie";
-        }
-        else if (this.winConditions[this.player1.choice] == this.player2.choice) {
-            return victor = "player 1"; // player 1 wins
-        }
-        else {
-            return victor = "player 2"; // player 2 wins
-        }
-    }
-};
 
 // ========================
 // Main
 // ========================
 // Shorthand for $( document ).ready()
 $(function () {
-    // Tooltip show what each symbol means
-    $('.tooltipped').tooltip();
 
-    // Initialize firebase
-    rpsM.initFirebase();
-    console.log(rpsM.database);
+    var config = {
+        apiKey: "AIzaSyCU6uAC7tvdC3V_C-4a1jFyvni3JYmCb7s",
+        authDomain: "train-c96fb.firebaseapp.com",
+        databaseURL: "https://train-c96fb.firebaseio.com",
+        projectId: "train-c96fb",
+        storageBucket: "train-c96fb.appspot.com",
+        messagingSenderId: "607529562472",
+        appId: "1:607529562472:web:6504a2024779b4b6"
+    };
+    firebase.initializeApp(config);
 
+    // A variable to reference the database.
+    var database = firebase.database();
+
+    // Variables for the onClick event
+    var name;
+    var destination;
+    var firstTrain;
+    var frequency = 0;
+
+    $("#add-train").on("click", function () {
+
+        event.preventDefault();
+
+        // Storing and retreiving new train data
+        name = $("#train-name").val().trim();
+        destination = $("#destination").val().trim();
+        firstTrain = $("#first-train").val().trim();
+        frequency = $("#frequency").val().trim();
+
+        // Pushing to database
+        database.ref().push({
+            name: name,
+            destination: destination,
+            firstTrain: firstTrain,
+            frequency: frequency,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+        });
+        $("form")[0].reset();
+    });
+
+    database.ref().on("child_added", function (childSnapshot) {
+
+        var nextArr;
+        var minAway;
+
+        // Chang year so first train comes before now
+        var firstTrainNew = moment(childSnapshot.val().firstTrain, "hh:mm").subtract(1, "years");
+
+        // Difference between the current and firstTrain
+        var diffTime = moment().diff(moment(firstTrainNew), "minutes");
+        var remainder = diffTime % childSnapshot.val().frequency;
+
+        // Minutes until next train
+        var minAway = childSnapshot.val().frequency - remainder;
+
+        // Next train time
+        var nextTrain = moment().add(minAway, "minutes");
+        nextTrain = moment(nextTrain).format("hh:mm");
+
+        $("#add-row").append("<tr><td>" + childSnapshot.val().name +
+            "</td><td>" + childSnapshot.val().destination +
+            "</td><td>" + childSnapshot.val().frequency +
+            "</td><td>" + nextTrain +
+            "</td><td>" + minAway + "</td></tr>");
+
+        // Handle the errors
+    }, function (errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+
+    database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function (snapshot) {
+
+        // Change the HTML to reflect
+        $("#name-display").html(snapshot.val().name);
+        $("#email-display").html(snapshot.val().email);
+        $("#age-display").html(snapshot.val().age);
+        $("#comment-display").html(snapshot.val().comment);
+    });
 
 
 });
 
-
-/*
-    // Get elements
-    const preObject = $('#object')[0];//document.getElementById("object");
-    console.log("asd", preObject);
-    const ulList = $('#list')[0];
-
-    // Create references
-    const dbRefObject = firebase.database().ref().child('object');
-    const dbRefList = dbRefObject.child('hobbies');
-
-    // Sync onject changes
-    dbRefObject.on('value', function(snap) {
-        console.log(snap.val());
-        preObject.innerText = JSON.stringify(snap.val(), null, 3);
-    });
-
-    // Sync list changes
-    dbRefList.on('child_added', function(snap) {
-        console.log(snap.val());
-        const li = document.createElement('li');
-        li.append(snap.val());
-        li.id = snap.key();
-        ulList.appendChild(li);
-    });
-*/
