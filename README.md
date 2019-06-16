@@ -1,4 +1,4 @@
-# RPS-Multiplayer
+# Train Scheduler
 
 #### Live site: https://dhuan008.github.io/RPS-Multiplayer/
 
