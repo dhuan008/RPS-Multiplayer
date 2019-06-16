@@ -4,11 +4,11 @@
 
 ## Game Objective:
 ```
-    --- 
+    --- Enter train times
 ```
 
 #### Game Instructions:
 ```
-    1. 
-    2. 
+    1. Fill in form
+    2. Watch train times
 ```
