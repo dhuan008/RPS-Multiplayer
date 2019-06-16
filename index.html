@@ -20,115 +20,103 @@
     <!-- Reset CSS -->
     <link rel="stylesheet" href="assets/css/reset.css">
 
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
+    <!-- Firebase Auth UI -->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
 </head>
 
-<body>
-    <main class="container">
+<div class="container">
+    <div class="jumbotron text-center bg-primary text-white">
+        <h1>Train Scheduler</h1>
+    </div>
 
-        <!-- Header -->
-        <div class="row">
-            <div class="col s12">
-                <h1 class="center-align">Rock, Paper, Scissors</h1>
-            </div>
+    <!-- "Current Train Schedule" Table -->
+    <div class="text-primary">
+        <div>
+            <h3>Current Train Schedule</h3>
+        </div>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Train Name</th>
+                        <th>Destination</th>
+                        <th>Frequency(min)</th>
+                        <th>Next Arrival</th>
+                        <th>Minutes Away</th>
+                    </tr>
+                </thead>
+
+                <!-- Train info goes here! -->
+                <tbody id="add-row">
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <!-- Form for adding a new train -->
+
+    <div class="text-primary">
+        <div>
+            <h3>Add Train</h3>
         </div>
 
-        <!-- Player Cards -->
-        <div class="row">
-            <!-- Player 1 -->
-            <div class="col s6 xl5">
-                <div class="card hoverable">
-                    <div class="card-image">
-                        <img src="./assets/images/sample-1.jpg">
-                        <span class="card-title">Player 1</span>
-                    </div>
-                    <div class="card-action">
-                        <div class="row valign-wrapper center-align">
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-red green darken-3 hoverable" data-position="bottom" data-tooltip="Scissors">
-                                    <i class="fa fa-hand-scissors-o fa-flip-horizontal"></i>
-                                </a>
-                            </div>
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-yellow purple darken-4 hoverable" data-position="bottom" data-tooltip="Paper">
-                                    <i class="fa fa-hand-paper-o fa-rotate-90"></i>
-                                </a>
-                            </div>
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-brown deep-orange darken-4 hoverable" data-position="bottom" data-tooltip="Rock">
-                                    <i class="fa fa-hand-rock-o fa-rotate-90"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p>Name: Wins: Losses: Etc:</p>
-                    </div>
+        <div>
+            <form>
+                <div class="form-group">
+                    <label for="text">Train Name</label>
+                    <input type="text" class="form-control" id="train-name">
                 </div>
-            </div>
 
-            <!-- Player 2 -->
-            <div class="col s6 xl5 offset-xl2">
-                <div class="card hoverable">
-                    <div class="card-image">
-                        <img src="./assets/images/sample-1.jpg">
-                        <span class="card-title">Player 2</span>
-                    </div>
-                    <div class="card-action">
-                        <div class="row valign-wrapper center-align">
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-brown deep-orange darken-4 hoverable" data-position="bottom" data-tooltip="Rock">
-                                    <i class="fa fa-hand-rock-o fa-5x fa-flipY-rotate90"></i>
-                                </a>
-                            </div>
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-yellow purple darken-4 hoverable" data-position="bottom" data-tooltip="Paper">
-                                    <i class="fa fa-hand-paper-o fa-5x fa-flipY-rotate90"></i>
-                                </a>
-                            </div>
-                            <div class="col s4">
-                                <a class="btn-floating btn-large tooltipped waves-effect waves-red green darken-3 hoverable" data-position="bottom" data-tooltip="Scissors">
-                                    <i class="fa fa-hand-scissors-o fa-5x"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p>Name: Wins: Losses: Etc:</p>
-                    </div>
+                <div class="form-group">
+                    <label for="text">Destination</label>
+                    <input type="text" class="form-control" id="destination">
                 </div>
-            </div>
 
+                <div class="form-group">
+                    <label for="text">First Train Time (HH:mm - Military Time)</label>
+                    <input type="text" class="form-control" id="first-train">
+                </div>
+
+                <div class="form-group">
+                    <label for="text">Frequency(min)</label>
+                    <input type="text" class="form-control" id="frequency">
+                </div>
+
+                <button type="submit" id="add-train" class="btn btn-primary">Submit</button>
+            </form>
         </div>
-
-        <!-- Chat -->
-        <div class="row">
-            <div class="col"></div>
-        </div>
+    </div>
+</div>
 
 
-    </main>
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-app.js"></script>
+<!-- Firebase Authentication -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<!-- Firebase Realtime Database -->
+<script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
 
+<!-- jQuery JavaScript CDN -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
-    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-app.js"></script>
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
+<!-- Materialize JavaScript CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <!-- jQuery JavaScript CDN -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Moments CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-    <!-- Materialize JavaScript CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-    <!-- Script -->
-    <script src="assets/javascript/app.js"></script>
+<!-- Script -->
+<script src="assets/javascript/app.js"></script>
 </body>
 
 </html>
